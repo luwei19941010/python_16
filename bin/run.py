@@ -12,9 +12,15 @@ import lib.jd
 lib.jd.fjd1()
 client.fc1()
 
-
-
-json.loads()
+v={'k1':123,'name':'陆威'}
+with open('json.txt',mode='w',encoding='utf-8') as f:
+    data=json.dump(v,f,ensure_ascii=False)
+    print()
+with open('json.txt',mode='r',encoding='utf-8') as r:
+    context=json.load(r)
+    print(context,type(context))
+# data=json.dumps(v,ensure_ascii=False)
+# print(data)
 
 
 
