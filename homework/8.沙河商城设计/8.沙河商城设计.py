@@ -99,8 +99,59 @@ def login():
                     return
             if flag:
                 print('登录成功')
+                shop(user_name)
+                return
             else:
                 print('登录失败')
+
+def shopping():
+    l=[]
+    l_buy=[]
+    num = int(input('每页显示几行:'))
+    with open('shop_list.txt', mode='r', encoding='utf-8') as fr:
+        for i in fr:
+            l.append(i.strip())
+    while True:
+        page,a=divmod(len(l),num)
+        if a>0:
+            page+=1
+        user_page=input('请输入页码1至%s,N exit():'%(page,))
+        if user_page.upper()=='N':
+            return
+        start_page=num*(int(user_page)-1)+1
+        end_page=num*int(user_page)
+        print(l[0])
+        for i in l[start_page:end_page+1]:
+            print(l.index(i),i)
+        id=input('请输入购买商品id,N exit():')
+        if id.upper()=='N':
+            continue
+        num1=input('商品数量:')
+      #  l_buy.append(l[int(id)] + '|%s' % (num1,))
+        with open('shop_buy.txt', mode='a', encoding='utf-8') as fr:
+            #for i in l_buy:
+            fr.write(l[int(id)] + '|%s' % (num1,)+'\n')
+            fr.flush()
+            os.makedirs(r'C:\Users\davidlu\PycharmProjects\luwei-Knightsplan\day16\homework\8.沙河商城设计\shopping_car')
+def shoping_car():
+    pass
+
+def shop(username):
+    while True:
+        d = {'1': shopping, '2': shoping_car}
+        print('沙河商城【购物】'.center(30, '*'))
+        print("""
+        1.shopping
+        2.shoping_car
+        """)
+        user_choice=input('请选择:')
+        # try:
+        if user_choice.upper() == 'N':
+            return
+        func = d.get(user_choice)
+        func()
+        # except Exception as  e:
+        #     print('输入错误')
 
 def rest():
     user_l=[]
@@ -114,25 +165,21 @@ def rest():
         for i in user_l:
             fw.write(str(i)+'\n')
 
-def shop():
-    pass
-
 while True:
-    d={'1':regist,'2':login,'3':shop}
+    d={'1':regist,'2':login}
     print('沙河商城主页'.center(30,'*'))
     print("""
     1.regist
     2.login
-    3.shop
     """)
     user_choice=input('请选择:')
-    try:
-        if user_choice.upper()=='N':
-            break
-        func=d.get(user_choice)
-        func()
-    except Exception as  e:
-        print('输入错误')
+    # try:
+    if user_choice.upper()=='N':
+        break
+    func=d.get(user_choice)
+    func()
+    # except Exception as  e:
+    #     print('输入错误')
 rest()
 print('欢迎使用，拜拜'.zfill(20))
 
