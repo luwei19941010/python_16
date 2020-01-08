@@ -29,6 +29,20 @@
 import os
 from datetime import datetime
 
+def check_log(func):
+    def inner(*args,**kwargs):
+        l=[]
+        with open('user_date.txt',mode='r',encoding='utf-8') as fr :
+            for i in fr:
+                l.append(eval(i))
+            for i in l:
+                if i['username']==args[0]:
+                    if i['login']==0:
+                        print('先去登录'.center(20,'*'))
+                        return
+                return func(*args,**kwargs)
+    return inner
+
 def regist():
     while True:
         user_l=[]
@@ -104,6 +118,7 @@ def login():
             else:
                 print('登录失败')
 
+@check_log
 def shopping(username):
     l=[]
     l_buy=[]
@@ -138,6 +153,7 @@ def shopping(username):
             fr.write(l[int(id)] + '|%s' % (num1,)+'\n')
             fr.flush()
 
+@check_log
 def shoping_car(username):
     print('购物车清单'.center(30,'*'))
     file_path = os.path.dirname(os.path.abspath(__file__))
@@ -158,13 +174,13 @@ def shop(username):
         2.shoping_car
         """)
         user_choice=input('请选择:')
-        # try:
-        if user_choice.upper() == 'N':
-            return
-        func = d.get(user_choice)
-        func(username)
-        # except Exception as  e:
-        #     print('输入错误')
+        try:
+            if user_choice.upper() == 'N':
+                return
+            func = d.get(user_choice)
+            func(username)
+        except Exception as  e:
+            print('输入错误')
 
 def rest():
     user_l=[]
@@ -186,13 +202,13 @@ while True:
     2.login
     """)
     user_choice=input('请选择:')
-    # try:
-    if user_choice.upper()=='N':
-        break
-    func=d.get(user_choice)
-    func()
-    # except Exception as  e:
-    #     print('输入错误')
-rest()
-print('欢迎使用，拜拜'.zfill(20))
+    try:
+        if user_choice.upper()=='N':
+            break
+        func=d.get(user_choice)
+        func()
+        rest()
+    except Exception as  e:
+        print('输入错误')
 
+print('欢迎使用，拜拜'.zfill(20))
