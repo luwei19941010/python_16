@@ -104,7 +104,7 @@ def login():
             else:
                 print('登录失败')
 
-def shopping():
+def shopping(username):
     l=[]
     l_buy=[]
     num = int(input('每页显示几行:'))
@@ -128,13 +128,26 @@ def shopping():
             continue
         num1=input('商品数量:')
       #  l_buy.append(l[int(id)] + '|%s' % (num1,))
-        with open('shop_buy.txt', mode='a', encoding='utf-8') as fr:
+        path1=r'shopping_car/%s'%(username)
+        path2=datetime.now().strftime('%Y-%m-%d-%H-%M')
+        path3=os.path.join(path1,path2)+'.txt'
+        if not os.path.exists(path1):#pytharm下无需绝对路径
+            os.makedirs(path1)
+        with open(path3, mode='a', encoding='utf-8') as fr:
             #for i in l_buy:
             fr.write(l[int(id)] + '|%s' % (num1,)+'\n')
             fr.flush()
-            os.makedirs(r'C:\Users\davidlu\PycharmProjects\luwei-Knightsplan\day16\homework\8.沙河商城设计\shopping_car')
-def shoping_car():
-    pass
+
+def shoping_car(username):
+    print('购物车清单'.center(30,'*'))
+    file_path = os.path.dirname(os.path.abspath(__file__))
+    user_file = file_path + '\\shopping_car' + '\\%s'%(username,)
+    for x, y, z in os.walk(user_file):
+        for i in z:
+            print(i)
+            with open(os.path.join(user_file, i), mode='r', encoding='utf-8') as fr:
+                for i in fr:
+                    print(i.strip())
 
 def shop(username):
     while True:
@@ -149,7 +162,7 @@ def shop(username):
         if user_choice.upper() == 'N':
             return
         func = d.get(user_choice)
-        func()
+        func(username)
         # except Exception as  e:
         #     print('输入错误')
 
